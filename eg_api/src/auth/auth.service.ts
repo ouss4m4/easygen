@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { IUser, JwtPayload, LoginResponse } from './auth.types';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -26,18 +28,31 @@ export class AuthService {
     return null;
   }
 
-  // user is paased through passport (req.user)
-  async login(user: IUser): Promise<LoginResponse | null> {
-    await new Promise((res) => setTimeout(res, 1000));
-
+  async login(user: IUser): Promise<LoginResponse> {
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
       name: user.name,
     };
+
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '1h',
+      secret:
+        process.env.JWT_SECRET ??
+        (() => {
+          throw new Error('JWT_SECRET is not defined in .env');
+        })(),
+    });
+
     return {
-      username: user.name,
-      jwt: this.jwtService.sign(payload),
+      accessToken,
+      expiresIn: 60 * 60,
+      refreshToken: '',
+      user: {
+        name: user.name,
+        email: user.email,
+        id: user.id,
+      },
     };
   }
 }

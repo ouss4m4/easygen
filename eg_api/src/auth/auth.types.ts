@@ -8,8 +8,14 @@ export type IUser = {
 };
 
 export type LoginResponse = {
-  username: string;
-  jwt: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
 };
 
 export interface RequestWithUser extends Request {
