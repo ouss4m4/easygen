@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/require-await */
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { IUser, JwtPayload, LoginResponse } from './auth.types';
@@ -20,7 +19,7 @@ export class AuthService {
     if (samePass) {
       const { id, name, email } = user;
       return {
-        id,
+        id: id.toString(),
         name,
         email,
       };
@@ -28,7 +27,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: IUser): Promise<LoginResponse> {
+  login(user: IUser): LoginResponse {
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,

@@ -29,7 +29,7 @@ export class AuthController {
       },
     },
   })
-  async login(@Req() req: RequestWithUser): Promise<LoginResponse> {
+  login(@Req() req: RequestWithUser): LoginResponse {
     return this.authService.login(req.user);
   }
 

@@ -68,7 +68,7 @@ export class UsersService {
 
   private toSafeUser(user: User): IUser {
     return {
-      id: user.id,
+      id: user.id.toString(),
       name: user.name,
       email: user.email,
     };

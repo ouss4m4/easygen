@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: eg_mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MONGO_INITDB_DATABASE: eg_api
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - eg_network
+
+volumes:
+  mongodb_data:
+    name: eg_mongodb_data
+
+networks:
+  eg_network:
+    name: eg_network
+    driver: bridge
