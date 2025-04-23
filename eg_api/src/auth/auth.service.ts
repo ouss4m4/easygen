@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { ILoggedUser, ILoginResponse } from './auth.types';
+import { IUser, JwtPayload, LoginResponse } from './auth.types';
 import { JwtService } from '@nestjs/jwt';
-
+import { compare } from 'bcryptjs';
 @Injectable()
 export class AuthService {
   constructor(
@@ -10,14 +10,16 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<ILoggedUser | null> {
-    const user = await this.usersService.findOne(email);
+  async checkCredentials(email: string, pass: string): Promise<IUser | null> {
+    const user = await this.usersService.findRawByEmail(email);
     if (!user) return null;
-    if (user && user.password === pass) {
-      const { userId, username, email } = user;
+
+    const samePass = await compare(pass, user.password);
+    if (samePass) {
+      const { id, name, email } = user;
       return {
-        userId,
-        username,
+        id,
+        name,
         email,
       };
     }
@@ -25,12 +27,16 @@ export class AuthService {
   }
 
   // user is paased through passport (req.user)
-  async login(user: ILoggedUser): Promise<ILoginResponse | null> {
+  async login(user: IUser): Promise<LoginResponse | null> {
     await new Promise((res) => setTimeout(res, 1000));
 
-    const payload = { email: user.email, sub: user.userId };
+    const payload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+    };
     return {
-      username: user.username,
+      username: user.name,
       jwt: this.jwtService.sign(payload),
     };
   }

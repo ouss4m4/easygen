@@ -2,20 +2,22 @@ import { Request } from 'express';
 
 // todo: replace with typeorm User model after db implementation
 export type IUser = {
-  userId: number;
-  username: string;
+  id: string;
+  name: string;
   email: string;
-  password: string;
 };
 
-// same as user without password. (passed as req.user by localstrategy)
-export type ILoggedUser = Omit<IUser, 'password'>;
-
-export interface ILoginResponse {
+export type LoginResponse = {
   username: string;
   jwt: string;
-}
+};
 
 export interface RequestWithUser extends Request {
-  user: ILoggedUser;
+  user: IUser;
 }
+
+export type JwtPayload = {
+  sub: string;
+  name: string;
+  email: string;
+};

@@ -4,17 +4,7 @@ import { Public } from './constants';
 import { RequestWithUser } from './auth.types';
 import { LocalAuthGuard } from './guards/local.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
-// import { ApiBody, ApiOperation } from '@nestjs/swagger';
-
-//   @ApiOperation({ summary: 'Log in with email and password' })
-//   @ApiBody({
-//     schema: {
-//       example: {
-//         email: 'john@example.com',
-//         password: 'secret123',
-//       },
-//     },
-//   })
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
 
 @Controller()
 export class AuthController {
@@ -23,19 +13,22 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
+  @ApiOperation({ summary: 'Log in with email and password' })
+  @ApiBody({
+    schema: {
+      example: {
+        email: 'john@gmail.com',
+        password: 'changeme',
+      },
+    },
+  })
   async login(@Req() req: RequestWithUser): Promise<any> {
     return this.authService.login(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get('auth/profile')
   getProfile(@Req() req: RequestWithUser) {
     return req.user;
-  }
-
-  @Public()
-  @Get()
-  hello() {
-    return 'hello world';
   }
 }
