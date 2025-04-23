@@ -2,14 +2,17 @@ import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { hash } from 'bcryptjs';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { IUserRepository } from './repository/userRepo.interface';
+import {
+  IUserRepository,
+  IUserRepositoryToken,
+} from './repository/userRepo.interface';
 import { User } from './entities/user.entity';
 import { IUser } from 'src/auth/auth.types';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject('IUserRepository')
+    @Inject(IUserRepositoryToken)
     private readonly usersRepo: IUserRepository,
   ) {}
 

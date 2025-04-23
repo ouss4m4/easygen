@@ -11,4 +11,4 @@ export interface IUserRepository {
   delete(id: string): Promise<boolean>;
 }
 
-export const IUserRepositoryToken = 'IUserRepositoryToken';
+export const IUserRepositoryToken = 'IUserRepository';
