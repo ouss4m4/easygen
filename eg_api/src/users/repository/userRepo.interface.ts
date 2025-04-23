@@ -9,6 +9,9 @@ export interface IUserRepository {
   create(data: CreateUserDto): Promise<User>;
   update(id: string, data: UpdateUserDto): Promise<User | null>;
   delete(id: string): Promise<boolean>;
+  incrementLoginAttempts(userId: string): Promise<void>;
+  resetLoginAttempts(userId: string): Promise<void>;
+  lockUser(userId: string, until: Date): Promise<void>;
 }
 
 export const IUserRepositoryToken = 'IUserRepository';

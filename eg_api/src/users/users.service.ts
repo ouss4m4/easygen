@@ -8,6 +8,7 @@ import {
 } from './repository/userRepo.interface';
 import { User } from './entities/user.entity';
 import { IUser } from 'src/auth/auth.types';
+import { ACCOUNT_LOCK_TIME_MS, MAX_LOGIN_ATTEMPTS } from 'src/auth/constants';
 
 @Injectable()
 export class UsersService {
@@ -64,6 +65,24 @@ export class UsersService {
 
   async delete(id: string): Promise<boolean> {
     return this.usersRepo.delete(id);
+  }
+
+  async incrementLoginAttempts(userId: string): Promise<void> {
+    const user = await this.usersRepo.findOneById(userId);
+    if (!user) return;
+
+    const attempts = (user.loginAttempts || 0) + 1;
+
+    if (attempts >= MAX_LOGIN_ATTEMPTS) {
+      const lockUntil = new Date(Date.now() + ACCOUNT_LOCK_TIME_MS);
+      await this.usersRepo.lockUser(userId, lockUntil);
+    } else {
+      await this.usersRepo.incrementLoginAttempts(userId);
+    }
+  }
+
+  async resetLoginAttempts(userId: string): Promise<void> {
+    await this.usersRepo.resetLoginAttempts(userId);
   }
 
   private toSafeUser(user: User): IUser {

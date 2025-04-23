@@ -49,4 +49,39 @@ export class MongoDBUserRepository implements IUserRepository {
     const result = await this.repository.delete(new ObjectId(id));
     return (result.affected ?? 0) > 0;
   }
+
+  async incrementLoginAttempts(userId: string): Promise<void> {
+    const user = await this.findOneById(userId);
+    if (user) {
+      user.loginAttempts = (user.loginAttempts || 0) + 1;
+      await this.repository.save(user);
+    }
+  }
+
+  async resetLoginAttempts(userId: string): Promise<void> {
+    await this.repository.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $set: {
+          loginAttempts: 0,
+          isLocked: false,
+          lockUntil: null,
+          updatedAt: new Date(),
+        },
+      },
+    );
+  }
+
+  async lockUser(userId: string, until: Date): Promise<void> {
+    await this.repository.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $set: {
+          isLocked: true,
+          lockUntil: until,
+          updatedAt: new Date(),
+        },
+      },
+    );
+  }
 }
