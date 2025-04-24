@@ -1,5 +1,11 @@
 import { ObjectId } from 'mongodb';
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ObjectIdColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -18,12 +24,15 @@ export class User {
   @Column({ default: 0 })
   loginAttempts: number;
 
-  @Column({ nullable: true })
-  lastLoginAttempt: Date;
-
   @Column({ default: false })
   isLocked: boolean;
 
   @Column({ nullable: true })
   lockUntil: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
