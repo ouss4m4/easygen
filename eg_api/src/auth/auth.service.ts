@@ -45,8 +45,13 @@ export class AuthService {
     };
 
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: process.env.JWT_EXPIRY,
+      expiresIn: process.env.JWT_EXPIRY, // 1h in env
       secret: process.env.JWT_SECRET,
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: process.env.JWT_REFRESH_EXPIRY, // 7d in env
+      secret: process.env.JWT_REFRESH_SECRET,
     });
 
     return {
@@ -56,8 +61,31 @@ export class AuthService {
         name: user.name,
       },
       accessToken,
-      refreshToken: '',
+      refreshToken,
       expiresIn: 36000,
     };
+  }
+
+  async refresh(refreshToken: string): Promise<LoginResponse> {
+    try {
+      const payload = this.jwtService.verify<JwtPayload>(refreshToken, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+
+      const user = await this.usersService.findById(payload.sub);
+
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      return this.login({
+        id: user.id.toString(),
+        email: user.email,
+        name: user.name,
+      });
+    } catch (err) {
+      console.log(err);
+      throw new UnauthorizedException('Invalid refresh token');
+    }
   }
 }
