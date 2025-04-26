@@ -11,9 +11,11 @@ export function User({ name, email }: IProfile) {
         <p className="text-lg font-semibold">{name}</p>
       </div>
 
-      <p className="text-sm text-center text-gray-400 mt-4 animate-fadeIn">
-        JWT expiry time is set to a short period on purpose to show the refresh functionality working. The profile is returned from the API
-        using the JWT payload to show a JWT Guard working.
+      <p className="text-sm text-center font-semibold  mt-4 animate-fadeIn">
+        JWT expiry time is set to a short period on purpose to show the refresh functionality working.
+      </p>
+      <p className="text-sm text-center font-semibold  mt-4 animate-fadeIn">
+        The profile is returned from the API using the JWT payload to show a JWT Guard working.
       </p>
     </>
   );

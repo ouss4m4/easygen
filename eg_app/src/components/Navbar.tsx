@@ -23,7 +23,7 @@ export default function Navbar() {
             {isLoggedIn ? (
               <>
                 <Link to="/profile">
-                  <Button className="cursor-pointer  underline" variant="link">
+                  <Button className="cursor-pointer " variant="link">
                     Profile
                   </Button>
                 </Link>
@@ -73,9 +73,14 @@ export default function Navbar() {
         <div className="sm:hidden">
           <div className="pt-2 pb-3 space-y-1">
             {isLoggedIn ? (
-              <Button onClick={logout} className="cursor-pointer" variant="link">
-                Logout
-              </Button>
+              <>
+                <Link to="/profile" className="block">
+                  <Button variant="link">Profile</Button>
+                </Link>
+                <Button onClick={logout} className="cursor-pointer" variant="link">
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
                 <Link to="/login" className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">

@@ -1,7 +1,11 @@
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 import { LoginForm } from "../components/forms/login.form";
+import { useAuth } from "@/context/AuthProvider";
 
 export default function Login() {
+  const { isLoggedIn } = useAuth();
+
+  if (isLoggedIn) return <Navigate to="/" />;
   return (
     <div className="flex items-center justify-center shadow p-6 bg-white max-w-xl mx-auto">
       <div className="flex flex-col p-6">

@@ -31,7 +31,7 @@ export function LoginForm() {
     try {
       const response = await api<LoginResponse>("POST", "/auth/login", { body: values }, false);
       login(response.accessToken);
-      navigate("/profile");
+      navigate("/");
     } catch (error) {
       let message = "An unexpected error occurred";
       if (error instanceof Error) {
