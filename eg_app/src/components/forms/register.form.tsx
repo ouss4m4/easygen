@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +6,9 @@ import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/schema/auth.schema";
+import { api } from "@/api/api";
+import { RegisterResponse } from "@/api/typings";
+import { redirect } from "react-router";
 
 export function RegisterForm() {
   const {
@@ -27,29 +28,21 @@ export function RegisterForm() {
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError("root", data.message ? { message: data.message } : { message: "Error registering" });
-      } else {
-        window.location.href = "/login";
-      }
+      await api<RegisterResponse>("POST", "/users", { body: values });
+      redirect("/login");
     } catch (error) {
-      console.log(error);
-      setError("root", { message: "An unexpected error occurred" });
+      let message = "An unexpected error occurred";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      setError("root", { message });
     }
   }
 
   return (
     <div className="grid gap-6">
+      {errors.root && <span className="text-red-500">{errors.root.message}</span>}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-y-3">
           <div className="grid gap-1">

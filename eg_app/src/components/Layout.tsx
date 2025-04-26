@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router";
 import { useState } from "react";
-
+import logo from "@/assets/eg.svg";
 export default function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -11,7 +11,7 @@ export default function Layout() {
           <div className="flex justify-between h-16">
             <div className="flex-shrink-0 flex items-center">
               <Link to="/" className="text-xl font-bold text-gray-800">
-                EasyGenerator
+                <img src={logo} />
               </Link>
             </div>
 

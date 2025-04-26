@@ -20,13 +20,13 @@ interface RequestWithCookies extends ExpressRequest {
 }
 
 @ApiTags('Authentication')
-@Controller()
+@Controller('api/v1/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
-  @Post('auth/login')
+  @Post('login')
   @ApiOperation({ summary: 'Log in with email and password' })
   @ApiResponse({
     status: 200,
@@ -71,7 +71,7 @@ export class AuthController {
   // }
 
   @Public()
-  @Post('auth/refresh')
+  @Post('refresh')
   @ApiOperation({ summary: 'Refresh access token using a refresh token' })
   @ApiResponse({
     status: 200,

@@ -7,6 +7,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schema/auth.schema";
+import { api } from "@/api/api";
+import { LoginResponse } from "@/api/typings";
+import { redirect } from "react-router";
 
 export function LoginForm() {
   const {
@@ -25,24 +28,15 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError("root", data.message ? { message: data.message } : { message: "Error logging in" });
-      } else {
-        window.location.href = "/";
-      }
+      const response = await api<LoginResponse>("POST", "/auth/login", { body: values });
+      localStorage.setItem("accessToken", response.accessToken);
+      redirect("/profile");
     } catch (error) {
-      console.log(error);
-      setError("root", { message: "An unexpected error occurred" });
+      let message = "An unexpected error occurred";
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      setError("root", { message });
     }
   }
 
