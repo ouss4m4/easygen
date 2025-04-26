@@ -1,3 +1,5 @@
+import { LoginResponse } from "./typings";
+
 const BASE_URL = (import.meta.env.VITE_API_URL || "") + "/api/v1";
 
 type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -25,11 +27,14 @@ function buildQueryString(params?: Record<string, string | number | boolean>): s
 export async function api<T>(method: HTTPMethod, path: string, options: RequestOptions = {}): Promise<T> {
   const { params, headers, body, ...rest } = options;
   const url = `${BASE_URL}${path}${buildQueryString(params)}`;
+  const token = localStorage.getItem("accessToken");
 
   const res = await fetch(url, {
     method,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -45,6 +50,9 @@ export async function api<T>(method: HTTPMethod, path: string, options: RequestO
       try {
         const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, { credentials: "include" });
         if (refreshRes.ok) {
+          // should we bring context here?
+          const data: LoginResponse = await refreshRes.json();
+          localStorage.setItem("accessToken", data.accessToken);
           return await api<T>(method, path, options); // retry original request
         }
       } catch (refreshError) {

@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

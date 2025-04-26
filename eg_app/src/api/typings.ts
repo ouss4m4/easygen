@@ -14,3 +14,9 @@ export interface RegisterResponse {
   name: string;
   email: string;
 }
+
+export interface IProfile {
+  id: string;
+  name: string;
+  email: string;
+}

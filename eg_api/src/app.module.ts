@@ -17,7 +17,7 @@ import { getTypeOrmConfig } from './database';
     ThrottlerModule.forRoot([
       {
         ttl: 60,
-        limit: 5,
+        limit: 60,
       },
     ]),
     AuthModule,

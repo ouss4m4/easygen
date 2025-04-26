@@ -5,6 +5,7 @@ import {
   UseGuards,
   Res,
   UnauthorizedException,
+  Get,
 } from '@nestjs/common';
 import { Request as ExpressRequest, Response } from 'express';
 import { AuthService } from './auth.service';
@@ -12,6 +13,7 @@ import { Public } from './constants';
 import { RequestWithUser, LoginResponse } from './auth.types';
 import { LocalAuthGuard } from './guards/local.guard';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 interface RequestWithCookies extends ExpressRequest {
   cookies: {
@@ -57,21 +59,21 @@ export class AuthController {
     return result;
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Get('auth/me')
-  // @ApiOperation({ summary: 'Get user profile' })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'Profile retrieved successfully',
-  //   type: 'IUser',
-  // })
-  // @ApiResponse({ status: 401, description: 'Unauthorized' })
-  // getProfile(@Req() req: RequestWithUser) {
-  //   return req.user;
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  @ApiOperation({ summary: 'Get user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'Profile retrieved successfully',
+    type: 'IUser',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  getProfile(@Req() req: RequestWithUser) {
+    return req.user;
+  }
 
   @Public()
-  @Post('refresh')
+  @Get('refresh')
   @ApiOperation({ summary: 'Refresh access token using a refresh token' })
   @ApiResponse({
     status: 200,
