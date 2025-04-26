@@ -1,9 +1,12 @@
 import { Link } from "react-router";
 import { useState } from "react";
 import logo from "@/assets/eg.svg";
+import { Button } from "./ui/button";
+import { useAuth } from "@/context/AuthProvider";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <nav className="bg-white shadow z-4">
@@ -17,12 +20,24 @@ export default function Navbar() {
 
           {/* Desktop menu */}
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
-            <Link to="/login" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-              Login
-            </Link>
-            <Link to="/signup" className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
-              Sign up
-            </Link>
+            {isLoggedIn ? (
+              <Button onClick={logout} className="cursor-pointer" variant="link">
+                Logout
+              </Button>
+            ) : (
+              <>
+                <Link to="/signup">
+                  <Button className="cursor-pointer" variant="link">
+                    Sign Up
+                  </Button>
+                </Link>
+                <Link to="/login">
+                  <Button className="cursor-pointer" variant="default">
+                    Log In
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -50,12 +65,20 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="sm:hidden">
           <div className="pt-2 pb-3 space-y-1">
-            <Link to="/login" className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
-              Login
-            </Link>
-            <Link to="/signup" className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
-              Sign up
-            </Link>
+            {isLoggedIn ? (
+              <Button onClick={logout} className="cursor-pointer" variant="link">
+                Logout
+              </Button>
+            ) : (
+              <>
+                <Link to="/login" className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+                  Login
+                </Link>
+                <Link to="/signup" className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+                  Sign up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

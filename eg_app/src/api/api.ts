@@ -40,8 +40,19 @@ export async function api<T>(method: HTTPMethod, path: string, options: RequestO
 
   if (!res.ok) {
     const { error, message, statusCode } = response as ApiErrorResponse;
+
+    if ((statusCode === 401 || statusCode === 403) && path !== "/auth/refresh") {
+      try {
+        const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, { credentials: "include" });
+        if (refreshRes.ok) {
+          return await api<T>(method, path, options); // retry original request
+        }
+      } catch (refreshError) {
+        console.error("Token refresh failed:", refreshError);
+      }
+    }
+
     const errorMessage = typeof message == "string" ? message : message.join(" - ");
-    // sentry would be a candidate here
     console.log(`${error} - ${statusCode} - ${message}`);
     throw new Error(errorMessage);
   }

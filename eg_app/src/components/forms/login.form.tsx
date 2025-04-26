@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,9 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schema/auth.schema";
 import { api } from "@/api/api";
 import { LoginResponse } from "@/api/typings";
-import { redirect } from "react-router";
+import { useNavigate } from "react-router";
+import { useAuth } from "@/context/AuthProvider";
 
 export function LoginForm() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,8 +30,8 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
       const response = await api<LoginResponse>("POST", "/auth/login", { body: values });
-      localStorage.setItem("accessToken", response.accessToken);
-      redirect("/profile");
+      login(response.accessToken);
+      navigate("/profile");
     } catch (error) {
       let message = "An unexpected error occurred";
       if (error instanceof Error) {
