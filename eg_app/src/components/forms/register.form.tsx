@@ -8,9 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/schema/auth.schema";
 import { api } from "@/api/api";
 import { RegisterResponse } from "@/api/typings";
-import { redirect } from "react-router";
+import { useNavigate } from "react-router";
 
 export function RegisterForm() {
+  const Navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,7 +30,7 @@ export function RegisterForm() {
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     try {
       await api<RegisterResponse>("POST", "/users", { body: values });
-      redirect("/login");
+      Navigate("/login");
     } catch (error) {
       let message = "An unexpected error occurred";
       if (error instanceof Error) {

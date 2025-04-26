@@ -21,9 +21,16 @@ export default function Navbar() {
           {/* Desktop menu */}
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
             {isLoggedIn ? (
-              <Button onClick={logout} className="cursor-pointer" variant="link">
-                Logout
-              </Button>
+              <>
+                <Link to="/profile">
+                  <Button className="cursor-pointer  underline" variant="link">
+                    Profile
+                  </Button>
+                </Link>
+                <Button onClick={logout} className="cursor-pointer" variant="link">
+                  Logout
+                </Button>
+              </>
             ) : (
               <>
                 <Link to="/signup">

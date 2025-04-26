@@ -15,17 +15,6 @@ export default function Home() {
           With right-to-left language support and an intuitive e-learning authoring tool, it’s easier than ever to create and share
           high-quality courses with your Arabic-speaking employees today!
         </p>
-        <div className="mt-10 flex items-center justify-center gap-x-6">
-          <a
-            href="#"
-            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Startt Teaching!
-          </a>
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
-            Learn more <span aria-hidden="true">→</span>
-          </a>
-        </div>
       </div>
     </div>
   );
