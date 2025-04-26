@@ -1,13 +1,35 @@
 services:
+  app:
+    build:
+      context: .
+    command: ["node", "dist/main.js"]
+    depends_on:
+      - mongodb
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV='development'
+      - PORT=3003
+
+      - JWT_SECRET=@tr0ngPa&&kÊŸou1DbēUsedH3re
+      - JWT_EXPIRY=20s
+      - JWT_REFRESH_EXPIRY=7d
+      - JWT_REFRESH_SECRET=ou1DbēUsedH3re@tr0ngPa&&kÊŸ
+
+      - DATABASE_USER='egadmin'
+      - DATABASE_PASSWORD='egpass'
+      - MONGODB_URI=mongodb://egadmin:egpass@mongodb:27017/eg_api?authSource=admin
+    networks:
+      - eg_network
   mongodb:
     image: mongo:latest
     container_name: eg_mongodb
     restart: always
     ports:
-      - '27017:27017'
+      - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: egadmin
+      MONGO_INITDB_ROOT_PASSWORD: egpass
       MONGO_INITDB_DATABASE: eg_api
     volumes:
       - mongodb_data:/data/db

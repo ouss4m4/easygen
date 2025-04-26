@@ -6,6 +6,8 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getTypeOrmConfig } from './database';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -20,6 +22,9 @@ import { getTypeOrmConfig } from './database';
         limit: 60,
       },
     ]),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, 'client'),
+    }),
     AuthModule,
     UsersModule,
   ],
