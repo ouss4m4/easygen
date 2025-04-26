@@ -1,56 +1,55 @@
-# Full Stack Test Task
+# Full Stack Auth App
 
-## Task Description
+## Features Checklist
 
-Implement a module that would allow a user to sign up and sign in to the application.
+### Frontend
 
-## Front-end Development
+- Built with React (Vite)
+- Styled using shadcn/ui (TailwindCSS based)
+- Sign Up page with:
 
-### Requirements
+  - Email, Name, Password fields
+  - Password strength validation (letter, number, special character, min 8 characters)
 
-- Develop the user authentication module using either the React or Vue framework.
-- Design elements are open to your creativity.
-- You have the flexibility to choose any additional modules or libraries (including design frameworks) if necessary.
+- Sign In page with:
+  - Email and Password fields
+- Application page:
+  - Displays a welcome message
+- Logout functionality
+- JWT auto-refresh when expired
+- Protected routes based on authentication state
+- React context for auth state management
+- Dockerized frontend build included in backend image
 
-### Sign Up Page
+### Backend
 
-Create a signup form with the following fields: email, name, and password.  
-After successful signup, users should be redirected to the application page.
+- Built with NestJS
+- Database: MongoDB (with Mongoose)
+- Endpoints for:
+  - User Registration
+  - User Login
+  - JWT Token Refresh
+  - Fetch authenticated user profile
+- Password hashing (bcryptjs)
+- JWT authentication with access and refresh tokens
+- `@nestjs/serve-static` for serving frontend
+- Environment variables managed for secret configuration
+- Full TypeScript across backend and frontend
+- Dockerized backend with multi-stage builds
 
-**Password Requirements:**
+### Extras
 
-- Minimum length of 8 characters
-- Contains at least 1 letter
-- Contains at least 1 number
-- Contains at least 1 special character
+- ZOD Form validation on both frontend and backend
+- Clean modular code structure
+- Minimal and responsive UI/UX
+- Security best practices applied (token expiry, password hashing)
+- Logging via NestJS built-in logger
 
-### Sign In Page
+## Tech Stack
 
-Create a sign-in form with fields for email and password.
-
-## Application Page
-
-Create a page displaying a welcome message:  
-**"Welcome to the application."**
-
-## Back-end Development
-
-### Technical Stack Requirements
-
-- Implement the back-end endpoints using the NestJS framework and integrate MongoDB as the database.
-- You can choose the appropriate ORM and other libraries if needed.
-
-### Notes
-
-- Build API endpoints to sign up and sign in users to the application, taking into account the field requirements described in the Front-end part.
-
-## Nice to Haves
-
-- Use TypeScript
-- Implement logging on the back end
-- Follow security best practices
-
-## Submission
-
-Once completed, create a public GitHub repository and push your code to it.  
-Share the repository link with the recruiter.
+- React (Vite)
+- NestJS
+- MongoDB
+- TypeScript
+- Docker
+- TailwindCSS (shadcn/ui)
