@@ -29,7 +29,7 @@ export function RegisterForm() {
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     try {
-      await api<RegisterResponse>("POST", "/users", { body: values });
+      await api<RegisterResponse>("POST", "/users", { body: values }, false);
       Navigate("/login");
     } catch (error) {
       let message = "An unexpected error occurred";

@@ -24,7 +24,7 @@ function buildQueryString(params?: Record<string, string | number | boolean>): s
   return `?${query.toString()}`;
 }
 
-export async function api<T>(method: HTTPMethod, path: string, options: RequestOptions = {}): Promise<T> {
+export async function api<T>(method: HTTPMethod, path: string, options: RequestOptions = {}, refresh = true): Promise<T> {
   const { params, headers, body, ...rest } = options;
   const url = `${BASE_URL}${path}${buildQueryString(params)}`;
   const token = localStorage.getItem("accessToken");
@@ -42,11 +42,11 @@ export async function api<T>(method: HTTPMethod, path: string, options: RequestO
   });
 
   const response: ApiErrorResponse | T = await res.json();
-
+  // Simulate timeout for frontend state
+  await new Promise((res) => setTimeout(res, 800));
   if (!res.ok) {
     const { error, message, statusCode } = response as ApiErrorResponse;
-
-    if ((statusCode === 401 || statusCode === 403) && path !== "/auth/refresh") {
+    if ((statusCode === 401 || statusCode === 403) && refresh) {
       try {
         const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, { credentials: "include" });
         if (refreshRes.ok) {

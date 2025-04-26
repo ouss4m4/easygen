@@ -29,7 +29,7 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     try {
-      const response = await api<LoginResponse>("POST", "/auth/login", { body: values });
+      const response = await api<LoginResponse>("POST", "/auth/login", { body: values }, false);
       login(response.accessToken);
       navigate("/profile");
     } catch (error) {
