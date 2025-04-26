@@ -41,18 +41,18 @@ export function LoginForm() {
   }
 
   return (
-    <div className="grid gap-6">
-      {errors.root && <span className="text-red-500">{errors.root.message}</span>}
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="relative pt-4">
+      <div className="absolute top-0">{errors.root && <span className="text-sm text-red-500">{errors.root.message}</span>}</div>
+      <form onSubmit={handleSubmit(onSubmit)} className="pt-4">
         <div className="grid gap-y-3">
-          <div className="grid gap-1">
+          <div className="relative pb-5 grid gap-1">
             <Label className="sr-only" htmlFor="email">
               Email
             </Label>
             <Input id="email" placeholder="name@example.com" type="email" {...register("email")} />
-            {errors.email && <span className="text-xs text-red-500">{errors.email.message}</span>}
+            <div className="absolute -bottom-2">{errors.email && <span className="text-xs text-red-500">{errors.email.message}</span>}</div>
           </div>
-          <div className="grid gap-1">
+          <div className="relative pb-5 grid gap-y-3">
             <Label className="sr-only" htmlFor="password">
               Password
             </Label>
@@ -63,9 +63,11 @@ export function LoginForm() {
               autoCapitalize="none"
               autoComplete="off"
               autoCorrect="off"
-              {...register("password")} // Fixed the name
+              {...register("password")}
             />
-            {errors.password && <span className="text-xs text-red-500">{errors.password.message}</span>}
+            <div className="absolute -bottom-2">
+              {errors.password && <span className="text-xs text-red-500">{errors.password.message}</span>}
+            </div>
           </div>
           <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Loading..." : "Login"}
