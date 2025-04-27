@@ -15,10 +15,10 @@ async function bootstrap() {
     .addTag('EG')
     .build();
 
+  // add swagger
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
   if (process.env.NODE_ENV != 'production') {
-    // add swagger
-    const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, documentFactory);
     // enable cors for dev
     app.enableCors({
       origin: 'http://localhost:5173',
