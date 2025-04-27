@@ -13,6 +13,7 @@ services:
       - PORT=3003
 
       - JWT_SECRET=@tr0ngPa&&kÊŸou1DbēUsedH3re
+      # Set to 20s for refresh testing purposes
       - JWT_EXPIRY=20s
       - JWT_REFRESH_EXPIRY=7d
       - JWT_REFRESH_SECRET=ou1DbēUsedH3re@tr0ngPa&&kÊŸ
