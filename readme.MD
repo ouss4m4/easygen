@@ -80,6 +80,7 @@ This solution implements user authentication using the **NestJS** framework on t
 
   - NestJS (for building the RESTful API)
   - Zod for DTOs and validation
+  - Passport for auth
   - MongoDB (for user data storage)
   - Redis (for storing and managing refresh tokens)
   - Swagger for API documentation
