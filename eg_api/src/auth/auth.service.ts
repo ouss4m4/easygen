@@ -6,15 +6,12 @@ import { compare } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  private readonly MAX_LOGIN_ATTEMPTS = 5;
-  private readonly LOCK_TIME = 15 * 60 * 1000; // 15 minutes in milliseconds
-
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
-  // called by localstrat
+  // called by localstrategy
   async checkCredentials(email: string, pass: string): Promise<IUser | null> {
     const user = await this.usersService.findRawByEmail(email);
     if (!user) return null;
@@ -45,12 +42,12 @@ export class AuthService {
     };
 
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: process.env.JWT_EXPIRY, // 1h in env
+      expiresIn: process.env.JWT_EXPIRY,
       secret: process.env.JWT_SECRET,
     });
 
     const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: process.env.JWT_REFRESH_EXPIRY, // 7d in env
+      expiresIn: process.env.JWT_REFRESH_EXPIRY,
       secret: process.env.JWT_REFRESH_SECRET,
     });
 

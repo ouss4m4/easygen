@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 import { Public } from './constants';
 import { RequestWithUser, LoginResponse } from './auth.types';
 import { LocalAuthGuard } from './guards/local.guard';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt.guard';
 
 interface RequestWithCookies extends ExpressRequest {
@@ -29,21 +29,6 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @ApiOperation({ summary: 'Log in with email and password' })
-  @ApiResponse({
-    status: 200,
-    description: 'Login successful',
-    // type: LoginResponse,
-  })
-  // @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiBody({
-    schema: {
-      example: {
-        email: 'john@gmail.com',
-        password: 'changeme',
-      },
-    },
-  })
   login(
     @Req() req: RequestWithUser,
     @Res({ passthrough: true }) res: Response,
@@ -53,33 +38,19 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      // path: '/auth/refresh',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     return result;
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  @ApiOperation({ summary: 'Get user profile' })
-  @ApiResponse({
-    status: 200,
-    description: 'Profile retrieved successfully',
-    type: 'IUser',
-  })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   getProfile(@Req() req: RequestWithUser) {
     return req.user;
   }
 
   @Public()
   @Get('refresh')
-  @ApiOperation({ summary: 'Refresh access token using a refresh token' })
-  @ApiResponse({
-    status: 200,
-    description: 'New access token issued',
-    // type: LoginResponse,
-  })
   async refresh(
     @Req() req: RequestWithCookies,
     @Res({ passthrough: true }) res: Response,
@@ -96,8 +67,7 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      path: '/auth/refresh',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return result;

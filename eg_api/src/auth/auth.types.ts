@@ -1,6 +1,5 @@
 import { Request } from 'express';
 
-// todo: replace with typeorm User model after db implementation
 export type IUser = {
   id: string;
   name: string;
