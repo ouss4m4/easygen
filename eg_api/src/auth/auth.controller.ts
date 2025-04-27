@@ -29,11 +29,11 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(
+  async login(
     @Req() req: RequestWithUser,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { refreshToken, ...result } = this.authService.login(req.user);
+    const { refreshToken, ...result } = await this.authService.login(req.user);
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

@@ -57,6 +57,7 @@ export async function api<T>(method: HTTPMethod, path: string, options: RequestO
         }
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
+        throw new Error("Invalid session");
       }
     }
 

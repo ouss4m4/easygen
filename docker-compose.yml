@@ -5,6 +5,7 @@ services:
     command: ["node", "dist/main.js"]
     depends_on:
       - mongodb
+      - cache
     ports:
       - "3003:3003"
     environment:
@@ -19,6 +20,7 @@ services:
       - DATABASE_USER='egadmin'
       - DATABASE_PASSWORD='egpass'
       - MONGODB_URI=mongodb://egadmin:egpass@mongodb:27017/eg_api?authSource=admin
+      - CACHE_URL=redis://cache:6379
     networks:
       - eg_network
   mongodb:
@@ -35,10 +37,22 @@ services:
       - mongodb_data:/data/db
     networks:
       - eg_network
+  cache:
+    image: redis:latest
+    container_name: eg_cache
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache_data:/data
+    networks:
+      - eg_network
 
 volumes:
   mongodb_data:
     name: eg_mongodb_data
+  cache_data:
+    name: eg_cache_data
 
 networks:
   eg_network:
