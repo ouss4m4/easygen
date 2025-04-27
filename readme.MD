@@ -7,8 +7,8 @@ To easily set up and run the application with Docker, you can use the following 
 ### 1. Clone the repository and navigate to the project directory:
 
 ```bash
-git clone <repository_url>
-cd <project_directory>
+git clone https://github.com/ouss4m4/easygen.git
+cd easygen
 ```
 
 ### 2. Build and run the application:
@@ -40,18 +40,18 @@ This solution implements user authentication using the **NestJS** framework on t
      - Contains at least 1 number
      - Contains at least 1 special character
 
-2. **Sign In**:
+2. **Sign In (passport-local)**:
 
    - Passport Local Strategy (email/password)
    - The user can sign in using their **email** and **password**.
-   - Login endpoint has a **5 retries** before it gets locked for **1 minute**
+   - Login has a **5 retries** attempts before it gets locked for **1 minute**
 
-3. **JWT Authentication**:
+3. **JWT Authentication (passport-jwt)**:
 
    - The system uses **JWT tokens** for authentication, where the back-end issues a JWT access token upon successful login.
    - The front-end stores the JWT access token and sends it with each request to protected routes.
 
-4. **Refresh Tokens**:
+4. **Refresh Tokens (redis cache)**:
    - Refresh tokens are used to extend the session. When the access token expires, the user can refresh it using the refresh token without needing to log in again.
    - Refresh tokens are stored securely using **httpOnly cookies** to prevent client-side access.
 
