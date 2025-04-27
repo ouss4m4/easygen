@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Logout from "./components/Logout";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "logout",
+        element: <Logout />,
       },
       {
         path: "signup",

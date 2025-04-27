@@ -47,18 +47,14 @@ export async function api<T>(method: HTTPMethod, path: string, options: RequestO
   if (!res.ok) {
     const { error, message, statusCode } = response as ApiErrorResponse;
     if ((statusCode === 401 || statusCode === 403) && refresh) {
-      try {
-        const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, { credentials: "include" });
-        if (refreshRes.ok) {
-          // should we bring context here?
-          const data: LoginResponse = await refreshRes.json();
-          localStorage.setItem("accessToken", data.accessToken);
-          return await api<T>(method, path, options); // retry original request
-        }
-      } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
-        throw new Error("Invalid session");
+      const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, { credentials: "include" });
+      if (refreshRes.ok) {
+        const data: LoginResponse = await refreshRes.json();
+
+        localStorage.setItem("accessToken", data.accessToken);
+        return await api<T>(method, path, options);
       }
+      window.location.href = "/logout";
     }
 
     const errorMessage = typeof message == "string" ? message : message.join(" - ");

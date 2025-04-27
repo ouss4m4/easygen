@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import logo from "@/assets/eg.svg";
 import { Button } from "./ui/button";
@@ -6,7 +6,11 @@ import { useAuth } from "@/context/AuthProvider";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    navigate("/logout");
+  };
 
   return (
     <nav className="bg-white shadow z-4">
@@ -27,7 +31,7 @@ export default function Navbar() {
                     Profile
                   </Button>
                 </Link>
-                <Button onClick={logout} className="cursor-pointer" variant="link">
+                <Button onClick={handleLogout} className="cursor-pointer" variant="link">
                   Logout
                 </Button>
               </>
@@ -77,7 +81,7 @@ export default function Navbar() {
                 <Link to="/profile" className="block">
                   <Button variant="link">Profile</Button>
                 </Link>
-                <Button onClick={logout} className="cursor-pointer" variant="link">
+                <Button onClick={handleLogout} className="cursor-pointer" variant="link">
                   Logout
                 </Button>
               </>

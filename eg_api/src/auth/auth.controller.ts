@@ -72,4 +72,22 @@ export class AuthController {
 
     return result;
   }
+
+  @Public()
+  @Get('logout')
+  async logout(
+    @Req() req: RequestWithCookies,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) return;
+
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    await this.authService.deleteRefreshToken(refreshToken);
+  }
 }

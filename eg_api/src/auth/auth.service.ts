@@ -76,13 +76,6 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string): Promise<LoginResponse> {
-    console.log('----------------------------------');
-    await this.cacheManager.set('ping', 'pong', 600);
-    console.log('----------------------------------');
-    const data = await this.cacheManager.get('ping');
-    console.log(data);
-
-    console.log('----------------------------------');
     try {
       const userId = await this.validateRefreshToken(refreshToken);
 
